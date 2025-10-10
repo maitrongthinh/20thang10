@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>20/10 - Mở Hộp Quà 🎁</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* CSS riêng cho trang index */
+        body { background-color: var(--color-pink); }
+        .gift-box-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px;
+        }
+        #gift-box-container {
+            position: relative;
+            margin-bottom: 20px;
+            cursor: pointer;
+            perspective: 800px; /* Tăng phối cảnh 3D */
+            width: 180px; /* Tăng kích thước hộp quà lên */
+            height: 180px;
+            animation: pulse-gift 2s infinite alternate;
+        }
+        
+        /* Thân Hộp Quà (Box Body) */
+        #gift-box {
+            width: 180px; 
+            height: 120px;
+            background: linear-gradient(to bottom, var(--box-color), #bfa7f2);
+            border-radius: 10px;
+            position: absolute;
+            bottom: 0;
+            left: 50%; 
+            transform: translateX(-50%) translateZ(-30px);
+            box-shadow: none;
+            overflow: hidden; 
+            transition: transform 1s var(--transition-timing);
+        }
+
+        /* RIBBON: Thêm Ruy băng DỌC (Vertical Ribbon) - Dùng ::before, z-index 2 */
+        #gift-box::before {
+            content: "";
+            position: absolute;
+            width: 30px; /* Chiều rộng ruy băng */
+            height: 100%;
+            background-color: var(--ribbon-color);
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: none; 
+            z-index: 2; /* Lớp trên */
+        }
+
+        /* ĐÃ LOẠI BỎ Ruy băng NGANG (Horizontal Ribbon) */
+
+        /* Nắp Hộp Quà (Box Lid) */
+        #gift-lid {
+            width: 210px; 
+            height: 40px;
+            /* ĐÃ CẬP NHẬT: Tăng cường độ sâu gradient */
+            background: linear-gradient(to top, #f0a7c4, var(--lid-color) 70%);
+            position: absolute;
+            top: 40px;
+            left: 50%; 
+            border-radius: 10px;
+            box-shadow: none;
+            transform-origin: center bottom; 
+            transition: transform 1.5s var(--transition-timing);
+            transform: translateX(-50%) rotateX(0deg) translateZ(0px); 
+            z-index: 5;
+            overflow: visible;
+            border: 2px solid rgba(0, 0, 0, 0.05);
+        }
+
+        /* Độ dày giả lập cho nắp hộp */
+        #gift-lid::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 5px; 
+            background-color: #f0a7c4; 
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            z-index: 1; 
+        }
+
+
+        /* Nơ Ruy Băng (Bow) */
+        .bow {
+            position: absolute;
+            top: -20px; /* Nằm phía trên nắp hộp */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10; 
+        }
+        .bow-knot {
+            width: 30px;
+            height: 30px;
+            background-color: var(--ribbon-color);
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .bow-loop {
+            width: 20px;
+            height: 40px;
+            background-color: var(--ribbon-color);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            position: absolute;
+            top: -10px;
+            transition: transform 1.5s var(--transition-timing);
+        }
+        .bow-loop-left {
+            transform: rotate(-30deg) translateX(-15px);
+            left: -15px;
+        }
+        .bow-loop-right {
+            transform: rotate(30deg) translateX(15px);
+            right: -15px;
+        }
+
+        /* Icon bên trong hộp quà */
+        .gift-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: 5rem;
+            color: var(--color-white);
+            z-index: 3; /* Phải nằm trên thân hộp nhưng dưới nắp (khi đóng) */
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            transition: transform 0.5s ease 0.5s; 
+        }
+
+        .gift-box-wrapper.open .gift-icon {
+            transform: translate(-50%, -50%) scale(1.2); 
+        }
+
+        @keyframes pulse-gift {
+            from { transform: scale(1); }
+            to { transform: scale(1.03); }
+        }
+    </style>
+    <!-- Gắn sự kiện click mở hộp quà -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const giftBoxContainer = document.getElementById('gift-box-container');
+            const giftBoxWrapper = document.querySelector('.gift-box-wrapper');
+            const mainContent = document.querySelector('.container.gift-box-wrapper');
+
+            // Xử lý click mở hộp quà
+            giftBoxContainer.addEventListener('click', () => {
+                if (giftBoxWrapper.classList.contains('open')) {
+                    return; // Đã mở rồi, không làm gì nữa
+                }
+
+                // Phát nhạc nền nếu chưa phát (yêu cầu tương tác người dùng)
+                if (typeof playSoftPiano === 'function') {
+                    playSoftPiano();
+                }
+
+                // Mở hộp quà
+                giftBoxWrapper.classList.add('open');
+                
+                // Hiển thị tin nhắn và nút sau khi hộp mở xong
+                setTimeout(() => {
+                    const nextButton = document.getElementById('next-page-button');
+                    if (nextButton) nextButton.classList.add('visible');
+                    
+                    // Thêm class fade-out cho chuyển cảnh
+                    mainContent.classList.remove('fade-in');
+                    mainContent.classList.add('fade-out');
+
+                    // Chuyển trang sau 1.5s
+                    setTimeout(() => {
+                         if (typeof navigate === 'function') {
+                            navigate('letter.html');
+                        } else {
+                            window.location.href = 'letter.html';
+                        }
+                    }, 1500);
+                }, 1000); // 1 giây sau khi click bắt đầu mở nắp
+
+                // Vô hiệu hóa click sau khi mở
+                giftBoxContainer.style.pointerEvents = 'none';
+            });
+            
+            // Tải lại nhạc nền nếu đã bật trước đó
+            if (typeof initAudio === 'function') {
+                initAudio();
+            }
+        });
+    </script>
+    <script src="main.js"></script>
+</head>
+<body id="index-page">
+    <div class="container gift-box-wrapper fade-in">
+        <h1 class="main-title">Chúc mừng các cô gái 9A!</h1>
+        <p class="subtitle">Ấn vào hộp quà để nhận món quà tinh thần này!</p>
+        
+        <div id="gift-box-container">
+            <div class="gift-box-wrapper">
+                <div id="gift-box">
+                    <!-- Ruy băng DỌC được tạo bằng :before trong CSS -->
+                    <span class="gift-icon">✨</span>
+                </div>
+                <div id="gift-lid">
+                    <!-- Nơ Ruy băng -->
+                    <div class="bow">
+                        <div class="bow-knot"></div>
+                        <div class="bow-loop bow-loop-left"></div>
+                        <div class="bow-loop bow-loop-right"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

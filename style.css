@@ -1,0 +1,398 @@
+/* Global CSS for 20/10 Surprise Website */
+
+/* --- THIẾT KẾ CHUNG --- */
+:root {
+    --color-pink: #f9d1e4; /* Hồng phấn */
+    --color-purple: #d5c7ff; /* Tím pastel */
+    --color-white: #ffffff;
+    --color-text-dark: #4b3e6e; /* Tím đậm cho chữ */
+    --color-text-light: #7b62a6; /* Tím nhạt cho phụ đề */
+    --ribbon-color: #e54b6d; /* Màu ruy băng nổi bật */
+    --box-color: var(--color-purple); /* Màu thân hộp */
+    --lid-color: var(--color-pink); /* Màu nắp hộp */
+    /* YÊU CẦU: Hiệu ứng mượt mà */
+    --transition-timing: cubic-bezier(0.25, 1, 0.5, 1);
+    --door-color: #7b62a6; /* Màu cửa mới, đồng bộ với tông tím */
+    --door-shadow: #3f315a;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    color: var(--color-text-dark);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    overflow-x: hidden;
+    transition: background-color 1s var(--transition-timing);
+}
+
+.container {
+    padding: 20px;
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.main-title {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    font-weight: 700;
+    color: inherit;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+.subtitle {
+    font-size: clamp(1rem, 3vw, 1.25rem);
+    color: var(--color-text-light);
+    margin-top: 10px;
+}
+
+/* --- HIỆU ỨNG CHUYỂN CẢNH & NÚT BẤM --- */
+.fade-in { 
+    opacity: 0; 
+    animation: fadeIn 1s var(--transition-timing) forwards; 
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.fade-out {
+    opacity: 0;
+    transition: opacity 0.5s ease-in;
+}
+
+.action-button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s var(--transition-timing);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.primary-button {
+    background-color: var(--ribbon-color); /* Màu ruy băng làm nút chính */
+    color: var(--color-white);
+}
+
+.primary-button:hover {
+    background-color: #f7708c;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* --- Audio Control --- */
+#audio-control {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-white);
+    border-radius: 50%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: background-color 0.3s;
+    z-index: 99;
+}
+#audio-control.paused { opacity: 0.6; }
+
+
+/* ---------------------------------------------------------------------- */
+/* --- HỘP QUÀ & RUY BĂNG (index.html) --- */
+/* ---------------------------------------------------------------------- */
+#gift-box-container {
+    position: relative;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    perspective: 1500px;
+    width: 250px; 
+    height: 250px;
+    animation: pulse-gift 2s infinite alternate;
+}
+
+.gift-box-wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+}
+
+#gift-box {
+    width: 220px; 
+    height: 160px;
+    background: linear-gradient(to bottom, var(--box-color), #bfa7f2);
+    border-radius: 10px;
+    position: absolute;
+    bottom: 0;
+    left: 50%; 
+    transform: translateX(-50%) translateZ(-30px);
+    box-shadow: none; /* Loại bỏ bóng đổ cho thân hộp */
+    overflow: hidden; 
+    transition: transform 1s var(--transition-timing);
+}
+#gift-box::before {
+    content: "";
+    position: absolute;
+    width: 30px;
+    height: 100%;
+    background-color: var(--ribbon-color);
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: none; /* Loại bỏ bóng đổ inset trên ruy băng */
+    z-index: 2; 
+}
+
+#gift-lid {
+    width: 250px; 
+    height: 50px;
+    /* ĐÃ CẬP NHẬT: Tăng cường độ sâu gradient, giúp nắp hộp có độ sâu hơn */
+    background: linear-gradient(to top, #f0a7c4, var(--lid-color) 70%);
+    position: absolute;
+    top: 40px; 
+    left: 50%; 
+    border-radius: 10px;
+    box-shadow: none; /* Loại bỏ bóng đổ trên nắp hộp */
+    transform-origin: center bottom; 
+    transition: transform 1.5s var(--transition-timing);
+    transform: translateX(-50%) rotateX(0deg) translateZ(0px); 
+    z-index: 5;
+    overflow: visible; /* Cần visible để hiển thị độ dày giả lập */
+    border: 2px solid rgba(0, 0, 0, 0.05); /* Viền mờ nhẹ để định hình */
+}
+
+/* ĐÃ CẬP NHẬT: Thêm cạnh bên/độ dày cho nắp hộp (giả lập 3D) */
+#gift-lid::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 5px; /* Chiều dày của cạnh nắp */
+    background-color: #f0a7c4; /* Màu đậm hơn cho cạnh dưới */
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    z-index: 1; 
+}
+
+
+/* Cập nhật hiệu ứng mở nắp: Mở rộng hơn, nảy mạnh hơn */
+.gift-box-wrapper.open #gift-lid {
+    transform: translateX(-50%) rotateX(-160deg) translateZ(100px) translateY(-100px);
+}
+
+/* Cập nhật hiệu ứng thân hộp: Nảy lên nhẹ nhàng */
+.gift-box-wrapper.open #gift-box {
+    transform: translateX(-50%) translateZ(-30px) translateY(15px);
+}
+
+.gift-box-wrapper.open::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* Tăng cường ánh sáng lan tỏa */
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.6) 0%, transparent 60%);
+    animation: sparkle-light 1s ease-out forwards;
+    pointer-events: none;
+    z-index: 100;
+}
+
+/* Cập nhật keyframe cho hiệu ứng chói sáng */
+@keyframes sparkle-light {
+    0% { opacity: 0; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.2); }
+    100% { opacity: 0; transform: scale(1.4); }
+}
+
+/* Loại bỏ box-shadow khỏi hiệu ứng nhịp đập */
+@keyframes pulse-gift {
+    from { transform: scale(1); }
+    to { transform: scale(1.03); }
+}
+
+
+/* ---------------------------------------------------------------------- */
+/* --- CÁNH CỬA (door.html) --- */
+/* (Giữ nguyên như phiên bản đã tinh chỉnh trước) */
+/* ---------------------------------------------------------------------- */
+.door-wrapper {
+    position: relative;
+    width: 200px;
+    height: 350px;
+    cursor: pointer;
+    margin-top: 30px;
+    transform-style: preserve-3d;
+    perspective: 2000px;
+    box-shadow: 0 10px 50px var(--door-shadow); /* Bóng đổ này dành cho CÁNH CỬA (trang khác) */
+    border-radius: 5px;
+    transition: all 1.5s var(--transition-timing);
+}
+
+.door-light-effect {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 4px;
+    height: 100%;
+    background: var(--color-white);
+    opacity: 0;
+    box-shadow: 0 0 50px 20px var(--color-white), 0 0 100px 40px rgba(255, 255, 255, 0.8);
+    transition: all 2s var(--transition-timing);
+    transform: translateX(-50%);
+    z-index: 1; 
+}
+
+.door-panel {
+    position: absolute;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    background-color: var(--door-color); 
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.4);
+    transition: transform 1.8s var(--transition-timing);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    transform-style: preserve-3d;
+}
+.door-panel:nth-child(2) {
+    left: 0;
+    border-right: none;
+    transform-origin: left center;
+    border-left: 5px solid var(--door-shadow);
+}
+.door-panel:nth-child(3) {
+    right: 0;
+    left: 50%;
+    border-left: none;
+    transform-origin: right center;
+    border-right: 5px solid var(--door-shadow);
+}
+.door-handle {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background-color: #ffd700;
+    border: 3px solid #ffcc00;
+    border-radius: 50%;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%) translateZ(10px);
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    z-index: 3;
+}
+
+.door-wrapper.open .door-panel:nth-child(2) { transform: rotateY(-150deg); }
+.door-wrapper.open .door-panel:nth-child(3) { transform: rotateY(150deg); }
+.door-wrapper.open .door-light-effect {
+    width: 100%; 
+    opacity: 1;
+    box-shadow: 0 0 150px 80px var(--color-white);
+}
+
+/* --- CONFETTI --- */
+.confetti-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 100;
+}
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: var(--color-pink);
+    opacity: 0;
+    border-radius: 50%;
+    animation: confetti-fall 5s linear infinite;
+}
+.confetti:nth-child(2n) { background-color: var(--color-purple); }
+.confetti:nth-child(3n) { background-color: var(--color-white); }
+
+@keyframes confetti-fall {
+    0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+/* Countdown Text */
+#door-message {
+    position: relative;
+    font-family: 'Dancing Script', cursive;
+    color: var(--color-white);
+    opacity: 1;
+    transition: opacity 0.5s;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 10; 
+}
+
+/* ---------------------------------------------------------------------- */
+/* --- TRANG HOA (FLOWER.HTML) - CSS Bắt buộc cho flow, không phải cho hoa --- */
+/* ---------------------------------------------------------------------- */
+/* Định vị tin nhắn chúc mừng 20/10 */
+#flower-message {
+    position: fixed;
+    top: 50%; /* Đặt giữa màn hình */
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.95);
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    color: var(--color-white);
+    text-shadow: 0 0 15px rgba(249, 209, 228, 0.8);
+    opacity: 0; /* Mặc định ẩn */
+    transition: all 1s var(--transition-timing);
+    z-index: 60;
+    text-align: center;
+}
+
+/* Khi có lớp 'visible' thì hiển thị */
+#flower-message.visible {
+    opacity: 1; 
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* Nút Tiếp tục */
+#continue-button-flower {
+    position: fixed; 
+    bottom: 50px; 
+    left: 50%; 
+    transform: translateX(-50%);
+    opacity: 0; /* Mặc định ẩn */
+    z-index: 70;
+    transition: opacity 1s var(--transition-timing);
+}
+
+/* Khi có lớp 'visible' thì hiển thị */
+#continue-button-flower.visible {
+    opacity: 1;
+}

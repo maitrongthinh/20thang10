@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>20/10 - Bức Thư Chân Thành 💌</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* CSS riêng cho trang thư */
+        body { background-color: var(--color-purple); }
+        .container {
+            max-width: 650px;
+            min-height: 400px;
+            padding: 50px;
+            text-align: left;
+        }
+        #letter-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.6rem;
+            min-height: 250px; /* Ensure container doesn't jump */
+            color: var(--color-text-dark);
+            white-space: pre-wrap; /* Preserve line breaks from JS */
+        }
+        #continue-button-letter {
+            opacity: 0;
+            transition: opacity 1s var(--transition-timing);
+            float: right;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body id="letter-page">
+    <div class="container fade-in">
+        <h1 class="main-title text-center" style="font-size: 3rem;">Gửi các nữ sinh 9A yêu quý 💖</h1>
+        
+        <div id="letter-text">
+            <!-- Nội dung thư sẽ được đánh máy ở đây -->
+        </div>
+
+        <button id="continue-button-letter" class="action-button primary-button">Tiếp tục hành trình</button>
+    </div>
+
+    <script>
+        // Nội dung bức thư dành riêng cho các bạn nữ lớp 9A
+        const letterContent = `Nhân dịp 20/10, thay mặt các bạn nam, chúng tớ xin gửi lời chúc tốt đẹp nhất đến tất cả các "bóng hồng" của lớp 9A!
+
+Các cậu là những người không chỉ xinh đẹp, dễ thương mà còn rất thông minh và tài năng. Năm cuối cấp này chắc chắn có nhiều áp lực, nhưng hy vọng các cậu luôn giữ vững tinh thần lạc quan, mạnh mẽ và tự tin.
+
+Hãy luôn tỏa sáng theo cách riêng của mình, không chỉ trong học tập mà còn trong mọi hoạt động khác. Chúc các cậu mãi mãi là nguồn cảm hứng và niềm tự hào của 9A!
+
+Hành trình chinh phục ước mơ còn dài, hãy cùng nhau cố gắng nhé!
+
+Thân ái,
+Tập thể nam sinh 9A.`;
+
+        let charIndex = 0;
+        const typingSpeed = 50; // Tốc độ đánh máy (ms)
+        const letterElement = document.getElementById('letter-text');
+        const continueButton = document.getElementById('continue-button-letter');
+
+        function typeLetter() {
+            if (charIndex < letterContent.length) {
+                letterElement.textContent += letterContent.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeLetter, typingSpeed);
+            } else {
+                // Hiển thị nút sau khi đánh máy xong
+                continueButton.style.opacity = '1';
+                continueButton.addEventListener('click', () => {
+                    // Thêm class fade-out cho chuyển cảnh
+                    document.body.classList.remove('fade-in');
+                    document.body.classList.add('fade-out');
+                    
+                    // Chuyển trang sau 0.5s
+                    setTimeout(() => {
+                         if (typeof navigate === 'function') {
+                            navigate('flower.html');
+                        } else {
+                            window.location.href = 'flower.html';
+                        }
+                    }, 500);
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof initAudio === 'function') {
+                initAudio(); // Khởi tạo âm thanh cho trang này
+            }
+            typeLetter();
+        });
+    </script>
+    <script src="main.js"></script>
+</body>
+</html>
