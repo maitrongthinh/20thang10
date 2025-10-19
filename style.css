@@ -294,20 +294,6 @@ body {
     transform-origin: right center;
     border-right: 5px solid var(--door-shadow);
 }
-.door-handle {
-    position: absolute;
-    width: 15px;
-    height: 15px;
-    background-color: #ffd700;
-    border: 3px solid #ffcc00;
-    border-radius: 50%;
-    top: 50%;
-    right: 20px;
-    transform: translateY(-50%) translateZ(10px);
-    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-    z-index: 3;
-}
-
 .door-wrapper.open .door-panel:nth-child(2) { transform: rotateY(-150deg); }
 .door-wrapper.open .door-panel:nth-child(3) { transform: rotateY(150deg); }
 .door-wrapper.open .door-light-effect {

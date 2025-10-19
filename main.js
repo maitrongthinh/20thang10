@@ -124,7 +124,7 @@ function openDoor() {
 
     // Sau khi cửa mở, hiển thị thông báo cuối cùng
     setTimeout(() => {
-        const finalMessage = "Hết bất ngờ rồi! Nhưng tình bạn 9A là mãi mãi! Chúc 20/10 vui vẻ! 🎉";
+        const finalMessage = "Chúc 20/10 vui vẻ! 🎉";
         const messageElement = document.getElementById('door-message');
         
         if (messageElement) {
